@@ -3,6 +3,9 @@ let { courses } = require('../data/courses');
 
 const { validationResult } = require('express-validator');
 
+
+//////////////////////////// routers handlers :
+ 
 const getAllCourses = (req, res) => {
     res.json(courses); 
     // res.send(); (send) -> sends any type of data 
