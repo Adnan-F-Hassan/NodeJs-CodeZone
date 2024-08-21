@@ -2,6 +2,14 @@ const express = require('express');
 
 const app = express();
 
+const mongoose = require('mongoose');
+
+const url = "mongodb+srv://edenfarid:nodejs_123@learn-mongodb.6kues.mongodb.net/codeZone?retryWrites=true&w=majority&appName=learn-MongoDB";
+
+mongoose.connect(url).then(() =>{
+    console.log("YaaaaY! connected to the mongoDB server ");
+})
+
 const coursesRouter = require('./routes/courses.route');
 
 app.use(express.json()); // read el body eno type: json 
