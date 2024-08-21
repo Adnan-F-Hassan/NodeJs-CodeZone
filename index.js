@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json()); // read el body eno type: json 
 // app.use(bodyParser.json()); // de gowa el express // read el body eno type: json 
 
-const courses= [
+let courses= [
     {
         id: 1,
         title: "course 1",
@@ -109,12 +109,16 @@ app.patch('/api/courses/:courseID', (req, res) => {
     }
     
     course = {...course, ...req.body};
-    res.status(200).json(course)
-     
-
+    res.status(200).json(course);
 })
 
-
+// DELETE course
+app.delete('/api/courses/:courseID', (req, res) => {
+    const courseID = +req.params.courseID;
+    courses = courses.filter((course) => course.id !== courseID);
+    
+    res.status(200).json({success: true});
+})
 
 
 app.listen(4000, () =>{
