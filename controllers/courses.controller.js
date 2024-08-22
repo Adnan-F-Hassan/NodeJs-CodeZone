@@ -4,6 +4,7 @@ let Course = require('../models/course.model');
 const { validationResult } = require('express-validator');
 
 const httpStatusText = require('../utils/httpStatusText');
+const asyncWrapper = require('../middlewares/asyncWrapper');
 
 /////////////// routers handlers :   ///////////////
  // $ operator
@@ -23,20 +24,21 @@ const getAllCourses = async (req, res) => {
 }
 
 
-const getCourse  = async (req, res) => { //req.params (get parameters)
-    // const courseID = +req.params.courseID; ///ay 7aga btegy mn el url => type: string // "+" type: number
-    // const course = courses.find((course) => course.id === courseID) //finding from array courses
-    try {
+const getCourse  = asyncWrapper(
+    async (req, res) => { //req.params (get parameters)
+        // const courseID = +req.params.courseID; ///ay 7aga btegy mn el url => type: string // "+" type: number
+        // const course = courses.find((course) => course.id === courseID) //finding from array courses
         const course = await Course.findById(req.params.courseID)
         if(!course){
             return res.status(404).json({status: httpStatusText.FAIL,  data: {course: "course not found"}});
         }
         return res.json({status: httpStatusText.SUCCESS,  data: {course}});
-    } catch (err) {
-        return res.status(400).json({status: httpStatusText.ERROR,  data: null, message: err.message, code: 400});
+        // try {
+        // } catch (err) {
+        //     return res.status(400).json({status: httpStatusText.ERROR,  data: null, message: err.message, code: 400});
+        // }
     }
-}
-
+)
 
 const addCourse = async (req, res) => {
 // console.log(req.body);

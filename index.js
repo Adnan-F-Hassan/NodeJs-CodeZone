@@ -30,6 +30,10 @@ app.all('*', (req, res, next) => {
     res.status(404).json({status: httpStatusText.ERROR, message: 'NOT FOUND'});
 })
 
+app.use((error, req, res, next) => {
+    res.status(500).json({status: httpStatusText.ERROR, message: error.message})
+})
+
 app.listen(process.env.PORT || 4000, () =>{
     console.log( "hello, welcome, listening on port: 4000 ");  
 })
