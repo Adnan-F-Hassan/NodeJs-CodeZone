@@ -25,13 +25,14 @@ app.use(express.json()); // read el body eno type: json
 app.use('/api/courses', coursesRouter) //ay 7aga hategy 3al "/api/courses" haywadeeha lel courses router
 // localhost /api/courses ==> /   (from the courses router)
 
-//middle ware handler
+// global middleware handler for not found router
 app.all('*', (req, res, next) => {
     res.status(404).json({status: httpStatusText.ERROR, message: 'NOT FOUND'});
 })
 
+// global error handler
 app.use((error, req, res, next) => {
-    res.status(500).json({status: httpStatusText.ERROR, message: error.message})
+    res.status(error.statusCode || 500).json({status: error.statusText || httpStatusText.ERROR, message: error.message, code: error.statusCode || 500, data: null})
 })
 
 app.listen(process.env.PORT || 4000, () =>{
