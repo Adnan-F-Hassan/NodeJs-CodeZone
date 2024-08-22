@@ -1,10 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 
 const app = express();
 
 const mongoose = require('mongoose');
 
-const url = "mongodb+srv://edenfarid:nodejs_123@learn-mongodb.6kues.mongodb.net/codeZone?retryWrites=true&w=majority&appName=learn-MongoDB";
+const url = process.env.MONGO_URL;
 
 mongoose.connect(url).then(() =>{
     console.log("YaaaaY! connected to the mongoDB server ");
@@ -20,6 +21,6 @@ app.use('/api/courses', coursesRouter) //ay 7aga hategy 3al "/api/courses" haywa
 // localhost /api/courses ==> /   (from the courses router)
 
 
-app.listen(4000, () =>{
+app.listen(process.env.PORT || 4000, () =>{
     console.log( "hello, welcome, listening on port: 4000 ");  
 })
