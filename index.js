@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 
 const app = express();
 
@@ -14,6 +15,8 @@ mongoose.connect(url).then(() =>{
 })
 
 const coursesRouter = require('./routes/courses.route');
+
+app.use(cors()); // ay orgin ye2dar yeklem el API  
 
 app.use(express.json()); // read el body eno type: json 
 // app.use(bodyParser.json()); // de gowa el express // read el body eno type: json 
