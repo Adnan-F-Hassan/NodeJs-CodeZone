@@ -40,9 +40,33 @@ const register = asyncWrapper( async(req, res, next) => {
 }) 
 
 
-const login = () => {            
+const login = asyncWrapper( async (req, res, next) => {
+    const {email, password} = req.body;            
+    
+    if (!email || !password){
+        const error = appError.create('email & password are required', 400, httpStatusText.FAIL)
+        return next(error);
+    }
 
-}
+    const user = await User.findOne({email:email});
+    
+    if(!user){
+        const error = appError.create('please enter correct email', 404, httpStatusText.ERROR)
+        return next(error);
+    }
+    
+    const matchedPassword = await bcrypt.compare(password, user.password)
+
+
+    if(user && matchedPassword){
+        return res.json ({status: httpStatusText.SUCCESS, data: {user: 'Welcome BACK!! :3'}});
+    } else {
+        const error = appError.create('failed to login', 400, httpStatusText.ERROR)
+        return next(error);
+    }
+
+
+})
 
 
 
