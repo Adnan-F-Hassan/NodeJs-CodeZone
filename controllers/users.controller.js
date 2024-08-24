@@ -1,7 +1,7 @@
 let User = require("../models/user.model");
 const httpStatusText = require('../utils/httpStatusText');
 const asyncWrapper = require("../middlewares/asyncWrapper");
-
+const appError = require("../utils/appError");
 
 const getAllUsers = asyncWrapper( async (req, res) => {
     const query = req.query;
@@ -16,10 +16,30 @@ const getAllUsers = asyncWrapper( async (req, res) => {
 
 
 
-const register = () => {
+const register = asyncWrapper( async(req, res, next) => {
+    const { firstName, lastName, email, password } = req.body;
 
-}
+    const oldUser = await User.findOne({ email : email});
+    if (oldUser){
+        const error = appError.create('User already exists', 400, httpStatusText.FAIL)
+        return next(error);
+    }
 
+    const newUser = new User({
+        firstName, 
+        lastName,
+        email,
+        password
+    })
+
+    await newUser.save()
+    res.status(201).json({status: httpStatusText.SUCCESS,  data: {course: newUser}})
+
+
+
+
+
+}) 
 
 
 const login = () => {            
