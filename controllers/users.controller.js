@@ -7,8 +7,6 @@ const generateJWT = require('../utils/generateJWT');
 
 const getAllUsers = asyncWrapper( async (req, res) => {
 
-    
-
     const query = req.query;
 
     const limit = query.limit || 10; 
@@ -39,12 +37,13 @@ const register = asyncWrapper( async(req, res, next) => {
         password: hashedPassword
     })
 
-    // generate JWT token  
-    const token = await generateJWT({email: newUser.email, id: newUser._id})
-    newUser.token = token
-
-    await newUser.save()
-    res.status(201).json({status: httpStatusText.SUCCESS,  data: {course: newUser}})
+     // generate JWT token 
+     const token = await generateJWT({email: newUser.email, id: newUser._id, role: newUser.role});
+     newUser.token = token;
+ 
+     await newUser.save();
+ 
+     res.status(201).json({status: httpStatusText.SUCCESS, data: {user: newUser}})
 }) 
 
 
@@ -67,14 +66,13 @@ const login = asyncWrapper( async (req, res, next) => {
 
     if(user && matchedPassword){
         // logged in successfully
-        const token = await generateJWT({email: user.email, id: user._id})
+        const token = await generateJWT({email: user.email, id: user._id, role: user.role});
         return res.json ({status: httpStatusText.SUCCESS, data: {token}});
     } else {
         const error = appError.create('failed to login', 400, httpStatusText.ERROR)
         return next(error);
     }
 })
-
 
 
 module.exports = {
