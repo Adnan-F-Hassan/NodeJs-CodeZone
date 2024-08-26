@@ -1,8 +1,10 @@
 const express = require('express');
-
 const router = express.Router();
 const courseController = require('../controllers/courses.controller');
 const { validationSchema } = require('../middlewares/validationSchema');
+const verifyToken = require('../middlewares/verifyToken');
+const userRoles = require('../utils/userRoles');
+const allowedTo = require('../middlewares/allowedTo');
 
 //CRUD : CREATE - READ - UPDATE - DELETE
 
@@ -10,8 +12,8 @@ router.route('/')
     //get all courses
     .get(courseController.getAllCourses )
     //CREATE new course
-    .post(validationSchema(), courseController.addCourse );
-
+    .post(verifyToken, allowedTo(userRoles.MANGER), validationSchema(), courseController.addCourse);
+    
 //get single course
 
 /* static: */
@@ -24,8 +26,7 @@ router.route('/')
 router.route('/:courseID')
     .get(courseController.getCourse) // get single course
     .patch(courseController.updateCourse) // UPDATE course
-    .delete(courseController.deleteCourse) // DELETE course
-
+    .delete(verifyToken, allowedTo(userRoles.ADMIN, userRoles.MANGER), courseController.deleteCourse);
 
 /* UPDATE course */ 
 /*  

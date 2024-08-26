@@ -1,10 +1,9 @@
-
+const { validationSchema } = require('../middlewares/validationSchema');
 let Course = require('../models/course.model');
 const { validationResult } = require('express-validator');
 const httpStatusText = require('../utils/httpStatusText');
 const asyncWrapper = require('../middlewares/asyncWrapper');
 const appError = require('../utils/appError');
-
 /////////////// routers handlers :   ///////////////
  // $ operator
 const getAllCourses = asyncWrapper(

@@ -11,10 +11,13 @@ const verifyToken = (req, res, next) => {
         return error;
     }
 
-    const token = authHeader.split('')[1];
+    const token = authHeader.split(' ')[1];
     try {
-        jwt.verify(token, process.env.JWT_SECRET_KEY);
+        // jwt.verify(token, process.env.JWT_SECRET_KEY);
+        const currentUser = jwt.verify(token, process.env.JWT_SECRET_KEY);
+        req.currentUser = currentUser;
         next();
+
     } catch (err) {
         const error = appError.create('invalid token', 401, httpStatusText.ERROR);
         return error;

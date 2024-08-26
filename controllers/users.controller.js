@@ -19,7 +19,7 @@ const getAllUsers = asyncWrapper( async (req, res) => {
 
 
 const register = asyncWrapper( async(req, res, next) => {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email, password, role } = req.body;
 
     const oldUser = await User.findOne({ email : email});
     if (oldUser){
@@ -34,7 +34,8 @@ const register = asyncWrapper( async(req, res, next) => {
         firstName, 
         lastName,
         email,
-        password: hashedPassword
+        password: hashedPassword,
+        role
     })
 
      // generate JWT token 
