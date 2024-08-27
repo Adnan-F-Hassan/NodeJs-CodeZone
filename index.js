@@ -7,7 +7,7 @@ const path = require('path');
 
 const app = express();
 
-//  app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const mongoose = require('mongoose');
 
